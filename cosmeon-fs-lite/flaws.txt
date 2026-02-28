@@ -1,0 +1,35 @@
+What You Did Right :
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Fixed chunk size (512KB) 
+Per-chunk SHA-256 hash 
+Full file SHA-256 hash 
+Unique file_id using UUID 
+Returning structured manifest 
+Clean manifest structure 
+Round-robin primary
+Deterministic replica (next node)
+Real replication (writes to 2 nodes)
+Online node filtering
+Minimum 2 nodes check
+One Important Design Concern
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+"data": data  # raw bytes (You are temporarily holding full file in memory) so If file is large → memory spike and manifest becomes heavy object .
+Replica is always (primary + 1) % total_nodes But if Node1 dies:
+Node0 loses replica for chunk0
+Node1 loses primary for chunk1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Current System Capability Summary
+You have:
+Chunking
+Per-chunk hashing
+Full file hashing
+Replication (factor = 2)
+Node ONLINE/OFFLINE simulation
+Replica fallback
+Metadata persistence
+Clean separation of layers
+Reconstruction validation
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------

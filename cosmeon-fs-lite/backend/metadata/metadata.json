@@ -1,0 +1,74 @@
+{
+  "bedccc90": {
+    "file_id": "bedccc90",
+    "file_name": "TT.png",
+    "file_size": 51016,
+    "total_chunks": 1,
+    "chunk_size": 524288,
+    "full_hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
+    "chunks": [
+      {
+        "id": "bedccc90_0",
+        "index": 0,
+        "size": 51016,
+        "hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
+        "primary_node": "node_0",
+        "replica_node": "node_1"
+      }
+    ]
+  },
+  "d0b02259": {
+    "file_id": "d0b02259",
+    "file_name": "Universal_Study_Flow_Theory_and_Numerical.pdf",
+    "file_size": 3052,
+    "total_chunks": 1,
+    "chunk_size": 524288,
+    "full_hash": "ad74b3f7e710fb180f5cfd3204c052b287e45a19f798831128907ffa51dcc639",
+    "chunks": [
+      {
+        "id": "d0b02259_0",
+        "index": 0,
+        "size": 3052,
+        "hash": "ad74b3f7e710fb180f5cfd3204c052b287e45a19f798831128907ffa51dcc639",
+        "primary_node": "node_0",
+        "replica_node": "node_1"
+      }
+    ]
+  },
+  "43ac2d94": {
+    "file_id": "43ac2d94",
+    "file_name": "attendance.xlsx",
+    "file_size": 9866,
+    "total_chunks": 1,
+    "chunk_size": 524288,
+    "full_hash": "c50231c96eb04190d13872d479f218c18271e8c14e257e25fc107e1021eb4943",
+    "chunks": [
+      {
+        "id": "43ac2d94_0",
+        "index": 0,
+        "size": 9866,
+        "hash": "c50231c96eb04190d13872d479f218c18271e8c14e257e25fc107e1021eb4943",
+        "primary_node": "node_0",
+        "replica_node": "node_1"
+      }
+    ]
+  },
+  "352495ff": {
+    "file_id": "352495ff",
+    "file_name": "TT.png",
+    "file_size": 51016,
+    "total_chunks": 1,
+    "chunk_size": 524288,
+    "full_hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
+    "chunks": [
+      {
+        "id": "352495ff_0",
+        "index": 0,
+        "size": 51016,
+        "hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
+        "primary_node": "node_0",
+        "replica_node": "node_1"
+      }
+    ]
+  }
+}
