@@ -1,0 +1,18 @@
+Claude code
+Antigravity
+Gemini pro
+Stitch
+flames blue
+Cursor
+Lovable
+Rocket
+openbuilder
+Pencil 
+codeex
+
+
+for web first describe the idea in simple language and then ask it to make PRD , Design doc using dribble or any other , tech stack doc and then coerabbit to find bugs and security issues on the git.
+
+With Antigravity planning your architecture, Pencil shaping your UI, and Claude Code executing multi file logic, the entire product lifecycle runs inside one window.
+
+Antigravity IDE as your interface. Gemini 3 Pro on the right as your planner. Claude Code in the terminal as your executor.
