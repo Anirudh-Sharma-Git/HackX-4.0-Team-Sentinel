@@ -57,7 +57,11 @@ async def background_repair_daemon():
         try:
             health = scan_system_health()
 
-            if health["under_replicated_chunks"] > 0:
+            if (
+                health["under_replicated_chunks"] > 0
+                or health["corrupted_chunks"] > 0
+                or health["missing_chunks"] > 0
+            ):
                 print("🛠️ Auto-repair triggered...")
                 repair_under_replicated_chunks()
                 print("✅ Auto-repair completed.")
