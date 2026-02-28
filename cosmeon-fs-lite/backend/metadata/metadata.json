@@ -1,35 +1,19 @@
 {
-  "cc810f4d": {
-    "file_id": "cc810f4d",
-    "file_name": "Solve problem.png",
-    "file_size": 1235072,
-    "total_chunks": 3,
+  "a0e05ff4": {
+    "file_id": "a0e05ff4",
+    "file_name": "TT.png",
+    "file_size": 51016,
+    "total_chunks": 1,
     "chunk_size": 524288,
-    "full_hash": "da1997a992d6cbe1b9ccb6ae8edf1f0d82e24722dcadd67844f820f9792434c8",
+    "full_hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
     "chunks": [
       {
-        "id": "cc810f4d_0",
+        "id": "a0e05ff4_0",
         "index": 0,
-        "size": 524288,
-        "hash": "c2b2878331e0d15c4da0857860d48c40eca8658b68d8fde0a5029d41f8e8d065",
+        "size": 51016,
+        "hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
         "primary_node": "node_0",
-        "replica_node": "node_3"
-      },
-      {
-        "id": "cc810f4d_1",
-        "index": 1,
-        "size": 524288,
-        "hash": "f538a63b0a40d5f6635f1055299078bfbfc31e43340085c0bbec18daa199ff43",
-        "primary_node": "node_1",
-        "replica_node": "node_0"
-      },
-      {
-        "id": "cc810f4d_2",
-        "index": 2,
-        "size": 186496,
-        "hash": "fb4ce728117a43e38cae4f21308d0f66692059cf43537f79b76b77449bd6f818",
-        "primary_node": "node_2",
-        "replica_node": "node_0"
+        "replica_node": "node_1"
       }
     ]
   }

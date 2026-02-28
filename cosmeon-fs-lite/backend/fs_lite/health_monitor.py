@@ -172,3 +172,56 @@ def repair_under_replicated_chunks():
         save_manifest(manifest)
 
     return {"repaired_chunks": repaired}
+
+def cleanup_over_replicated_chunks():
+
+    files = list_files()
+    cleaned = 0
+    RF = 2
+
+    for file_info in files:
+        manifest = get_manifest(file_info["file_id"])
+
+        for chunk in manifest["chunks"]:
+
+            chunk_id = chunk["id"]
+
+            # 🔥 Find all physical copies across all nodes
+            physical_locations = []
+
+            for node in get_all_nodes():
+                node_id = node["node_id"]
+                try:
+                    read_chunk_from_node(node_id, chunk_id)
+                    physical_locations.append(node_id)
+                except Exception:
+                    continue
+
+            # If over-replicated
+            if len(physical_locations) > RF:
+
+                # Keep first RF copies
+                nodes_to_keep = physical_locations[:RF]
+                nodes_to_delete = physical_locations[RF:]
+
+                for node_id in nodes_to_delete:
+                    try:
+                        import os
+                        base_dir = os.path.dirname(os.path.dirname(__file__))
+                        path = os.path.join(base_dir, "nodes", node_id, chunk_id)
+
+                        if os.path.exists(path):
+                            os.remove(path)
+                            cleaned += 1
+                            print(f"🧹 Removed extra replica {chunk_id} from {node_id}")
+
+                    except Exception:
+                        continue
+
+                # Update metadata
+                chunk["primary_node"] = nodes_to_keep[0]
+                chunk["replica_node"] = nodes_to_keep[1]
+
+        save_manifest(manifest)
+
+    return {"cleaned_chunks": cleaned}
