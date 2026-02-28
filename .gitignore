@@ -1,0 +1,14 @@
+# Runtime storage
+backend/nodes/*
+backend/downloads/*
+backend/temp_uploads/*
+backend/metadata/metadata.json
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Frontend
+node_modules/
+dist/
