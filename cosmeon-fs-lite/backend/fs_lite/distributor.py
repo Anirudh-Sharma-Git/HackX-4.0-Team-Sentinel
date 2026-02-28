@@ -1,42 +1,96 @@
-from fs_lite.node_manager import get_online_nodes, write_chunk_to_node
+import random
+import os
+from fs_lite.node_manager import (
+    get_online_nodes,
+    write_chunk_to_node,
+    has_capacity,
+)
+
+REPLICATION_FACTOR = 2
+
 
 def distribute_chunks(manifest: dict) -> dict:
     """
-    Assigns each chunk to a primary node and a replica node.
-    Strategy: round-robin for primary, next node in list for replica.
-    Writes chunk data to both nodes.
-    Returns updated manifest with node assignments.
+    Capacity-aware, load-aware distribution.
+    Fully atomic:
+    - If any failure occurs, all written chunks are rolled back.
     """
-    online_nodes = get_online_nodes()
 
-    if len(online_nodes) < 2:
-        raise RuntimeError("Need at least 2 online nodes for replication!")
+    print(f"\n📡 Distributing {manifest['total_chunks']} chunks...")
+    print(f"   Replication factor: {REPLICATION_FACTOR}")
+    print(f"   Node capacity limit enforced")
+    print(f"   Atomic upload enabled\n")
 
-    node_ids = [n["node_id"] for n in online_nodes]
-    total_nodes = len(node_ids)
+    written_chunks = []  # Track (node_id, chunk_id) for rollback
 
-    print(f"\n📡 Distributing {manifest['total_chunks']} chunks across {total_nodes} nodes...")
-    print(f"   Replication factor: 2 (primary + 1 replica)\n")
+    try:
+        for i, chunk in enumerate(manifest["chunks"]):
+            chunk_size = chunk["size"]
 
-    for i, chunk in enumerate(manifest["chunks"]):
-        # Round-robin primary assignment
-        primary_index = i % total_nodes
-        # Replica is always the next node in the list
-        replica_index = (primary_index + 1) % total_nodes
+            online_nodes = get_online_nodes()
 
-        primary_node = node_ids[primary_index]
-        replica_node = node_ids[replica_index]
+            eligible_nodes = [
+                n for n in online_nodes
+                if has_capacity(n["node_id"], chunk_size)
+            ]
 
-        # Write chunk to primary node
-        write_chunk_to_node(primary_node, chunk["id"], chunk["data"])
-        # Write chunk to replica node
-        write_chunk_to_node(replica_node, chunk["id"], chunk["data"])
+            if len(eligible_nodes) < REPLICATION_FACTOR:
+                raise RuntimeError(
+                    "Not enough node capacity to satisfy replication factor!"
+                )
 
-        # Update manifest with node assignment
-        manifest["chunks"][i]["primary_node"] = primary_node
-        manifest["chunks"][i]["replica_node"] = replica_node
+            # Least loaded primary
+            sorted_nodes = sorted(
+                eligible_nodes,
+                key=lambda n: n["chunk_count"]
+            )
 
-        print(f"   ✅ Chunk {chunk['index']:02d} → Primary: {primary_node} | Replica: {replica_node}")
+            primary_node = sorted_nodes[0]["node_id"]
 
-    print(f"\n🛰️  Distribution complete!")
-    return manifest
+            remaining_nodes = [
+                n["node_id"]
+                for n in sorted_nodes
+                if n["node_id"] != primary_node
+            ]
+
+            replica_node = random.choice(remaining_nodes)
+
+            # Write primary
+            write_chunk_to_node(primary_node, chunk["id"], chunk["data"])
+            written_chunks.append((primary_node, chunk["id"]))
+
+            # Write replica
+            write_chunk_to_node(replica_node, chunk["id"], chunk["data"])
+            written_chunks.append((replica_node, chunk["id"]))
+
+            manifest["chunks"][i]["primary_node"] = primary_node
+            manifest["chunks"][i]["replica_node"] = replica_node
+
+            print(
+                f"   ✅ Chunk {chunk['index']:02d} → "
+                f"Primary: {primary_node} | Replica: {replica_node}"
+            )
+
+        print("\n🛰️  Smart capacity-aware distribution complete!")
+        return manifest
+
+    except Exception as e:
+        print(f"\n❌ Distribution failed: {e}")
+        print("🔄 Rolling back written chunks...")
+
+        # Rollback all writes for this upload attempt
+        for node_id, chunk_id in written_chunks:
+            try:
+                chunk_path = os.path.join(
+                    os.path.dirname(os.path.dirname(__file__)),
+                    "nodes",
+                    node_id,
+                    chunk_id
+                )
+                if os.path.exists(chunk_path):
+                    os.remove(chunk_path)
+            except Exception:
+                pass
+
+        print("✅ Rollback complete. System state restored.\n")
+        raise e

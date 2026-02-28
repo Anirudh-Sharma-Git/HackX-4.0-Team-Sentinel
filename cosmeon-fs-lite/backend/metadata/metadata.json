@@ -1,78 +1,6 @@
 {
-  "f0f73e17": {
-    "file_id": "f0f73e17",
-    "file_name": "TT.png",
-    "file_size": 51016,
-    "total_chunks": 1,
-    "chunk_size": 524288,
-    "full_hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
-    "chunks": [
-      {
-        "id": "f0f73e17_0",
-        "index": 0,
-        "size": 51016,
-        "hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
-        "primary_node": "node_1",
-        "replica_node": "node_0"
-      }
-    ]
-  },
-  "1d7590ae": {
-    "file_id": "1d7590ae",
-    "file_name": "Universal_Study_Flow_Theory_and_Numerical.pdf",
-    "file_size": 3052,
-    "total_chunks": 1,
-    "chunk_size": 524288,
-    "full_hash": "ad74b3f7e710fb180f5cfd3204c052b287e45a19f798831128907ffa51dcc639",
-    "chunks": [
-      {
-        "id": "1d7590ae_0",
-        "index": 0,
-        "size": 3052,
-        "hash": "ad74b3f7e710fb180f5cfd3204c052b287e45a19f798831128907ffa51dcc639",
-        "primary_node": "node_1",
-        "replica_node": "node_0"
-      }
-    ]
-  },
-  "792d54f1": {
-    "file_id": "792d54f1",
-    "file_name": "TT.png",
-    "file_size": 51016,
-    "total_chunks": 1,
-    "chunk_size": 524288,
-    "full_hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
-    "chunks": [
-      {
-        "id": "792d54f1_0",
-        "index": 0,
-        "size": 51016,
-        "hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
-        "primary_node": "node_0",
-        "replica_node": "node_1"
-      }
-    ]
-  },
-  "58d0fea2": {
-    "file_id": "58d0fea2",
-    "file_name": "AI`s.txt",
-    "file_size": 613,
-    "total_chunks": 1,
-    "chunk_size": 524288,
-    "full_hash": "4845d0ae49d4af6172341a9591c2bd60da706c21a24e3ee94cf24d3dce883cb2",
-    "chunks": [
-      {
-        "id": "58d0fea2_0",
-        "index": 0,
-        "size": 613,
-        "hash": "4845d0ae49d4af6172341a9591c2bd60da706c21a24e3ee94cf24d3dce883cb2",
-        "primary_node": "node_0",
-        "replica_node": "node_1"
-      }
-    ]
-  },
-  "4948660d": {
-    "file_id": "4948660d",
+  "cc810f4d": {
+    "file_id": "cc810f4d",
     "file_name": "Solve problem.png",
     "file_size": 1235072,
     "total_chunks": 3,
@@ -80,45 +8,27 @@
     "full_hash": "da1997a992d6cbe1b9ccb6ae8edf1f0d82e24722dcadd67844f820f9792434c8",
     "chunks": [
       {
-        "id": "4948660d_0",
+        "id": "cc810f4d_0",
         "index": 0,
         "size": 524288,
         "hash": "c2b2878331e0d15c4da0857860d48c40eca8658b68d8fde0a5029d41f8e8d065",
-        "primary_node": "node_1",
-        "replica_node": "node_0"
+        "primary_node": "node_0",
+        "replica_node": "node_3"
       },
       {
-        "id": "4948660d_1",
+        "id": "cc810f4d_1",
         "index": 1,
         "size": 524288,
         "hash": "f538a63b0a40d5f6635f1055299078bfbfc31e43340085c0bbec18daa199ff43",
-        "primary_node": "node_0",
-        "replica_node": "node_1"
+        "primary_node": "node_1",
+        "replica_node": "node_0"
       },
       {
-        "id": "4948660d_2",
+        "id": "cc810f4d_2",
         "index": 2,
         "size": 186496,
         "hash": "fb4ce728117a43e38cae4f21308d0f66692059cf43537f79b76b77449bd6f818",
-        "primary_node": "node_1",
-        "replica_node": "node_0"
-      }
-    ]
-  },
-  "66dd6096": {
-    "file_id": "66dd6096",
-    "file_name": "attendance.xlsx",
-    "file_size": 9866,
-    "total_chunks": 1,
-    "chunk_size": 524288,
-    "full_hash": "c50231c96eb04190d13872d479f218c18271e8c14e257e25fc107e1021eb4943",
-    "chunks": [
-      {
-        "id": "66dd6096_0",
-        "index": 0,
-        "size": 9866,
-        "hash": "c50231c96eb04190d13872d479f218c18271e8c14e257e25fc107e1021eb4943",
-        "primary_node": "node_1",
+        "primary_node": "node_2",
         "replica_node": "node_0"
       }
     ]

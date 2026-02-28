@@ -1,0 +1,72 @@
+Realistic Orbital Simulation Ideas (Within Scope)
+
+Instead of random feature additions, think like this:
+
+1️⃣ Communication Window Simulation
+
+Satellite sometimes becomes temporarily unreachable.
+
+We already simulate OFFLINE.
+But we can simulate:
+
+Random temporary communication blackout
+
+Delayed response
+
+Low effort, high realism.
+
+2️⃣ Automatic Rebalancing (Matches Optional Enhancement)
+
+When satellite returns:
+
+System auto-restores replication factor
+
+You partially do this.
+We can formalize it.
+
+High value.
+
+3️⃣ Simulated Latency
+
+Add artificial delay when reading from a node.
+
+So:
+
+Primary takes 200ms
+
+Replica takes 400ms
+
+This demonstrates distributed retrieval.
+
+Low-medium effort.
+High demo value.
+
+4️⃣ Storage Capacity Simulation
+
+Each satellite has limited capacity.
+
+If full:
+
+Upload refused
+
+Or rebalancing triggered
+
+This matches real orbital constraints.
+
+High wow.
+Medium effort.
+
+5️⃣ Caching Mechanism (Explicitly Mentioned in PS)
+
+Add simple in-memory LRU cache for reconstructed files.
+
+Show:
+
+First download = slow
+
+Second download = instant
+
+This directly matches optional enhancement.
+
+High wow.
+Low-medium effort.
