@@ -70,3 +70,28 @@ This directly matches optional enhancement.
 
 High wow.
 Low-medium effort.
+
+🛰 A) Multi-Master Failover
+
+You can say:
+
+That would be implemented using leader election and distributed metadata replication.
+
+💾 B) Dynamic Replication Factor
+
+You can say:
+
+We experimented with per-file RF but decided to keep fixed RF=2 for stability and cleanup correctness.
+
+🌍 C) Network Latency Simulation
+
+You can say:
+
+We focused on durability and repair behavior. Latency simulation can be added via artificial delays in node reads.
+
+📊 D) Monitoring & Observability
+
+You can say:
+
+UI already shows health state. Next upgrade would be real-time event logs and replica heatmaps.
+

@@ -1,0 +1,284 @@
+===========================================
+PENDING ITEMS (NOT FULLY IMPLEMENTED)
+===========================================
+
+1) STREAMING FILE UPLOAD (SCALABILITY)
+---------------------------------------
+Current:
+- Entire file loaded into memory during upload.
+
+Risk:
+- Memory spike for large files (100MB+).
+- Not production scalable.
+
+Upgrade:
+- Stream upload in chunks.
+- Write directly to nodes during streaming.
+- Avoid loading full file into memory.
+
+
+2) REMOVE RAW CHUNK DATA FROM MANIFEST PIPELINE
+------------------------------------------------
+Current:
+- split_file() temporarily stores raw chunk bytes in manifest before distribution.
+
+Risk:
+- Memory overhead during upload.
+- Heavy manifest object.
+
+Upgrade:
+- Direct-write chunk to node during split phase.
+- Manifest should contain metadata only.
+
+
+3) FIXED REPLICATION FACTOR (RF = 2)
+------------------------------------
+Current:
+- Replication factor hardcoded to 2.
+
+Limitation:
+- Cannot simulate durability tiers.
+- No high-priority file support.
+
+Future Option:
+- Global configurable RF.
+- Per-file RF (advanced, higher complexity).
+
+
+4) METADATA SINGLE POINT OF FAILURE
+------------------------------------
+Current:
+- Single metadata.json file.
+
+Risk:
+- Corruption or deletion = total metadata loss.
+- Not scalable for many files.
+
+Upgrade:
+- Move to SQLite.
+- Or per-file metadata files.
+- Or replicated metadata simulation.
+
+
+5) NO TRUE NETWORK SIMULATION
+-----------------------------
+Current:
+- Nodes are local folders.
+
+Limitation:
+- No real network delay.
+- No packet loss.
+- No partition simulation.
+
+Upgrade:
+- Add artificial latency per node.
+- Simulate partial network partitions.
+- Add request timeout behavior.
+
+
+6) NO VERSIONING / SNAPSHOT SUPPORT
+------------------------------------
+Current:
+- File overwrite replaces metadata entry.
+- No historical versions stored.
+
+Upgrade:
+- Maintain version history per file_id.
+- Snapshot storage before overwrite.
+- Add version restore endpoint.
+
+
+7) LIMITED OBSERVABILITY
+------------------------
+Current:
+- Basic health state (HEALTHY / DEGRADED / CRITICAL).
+- No detailed event timeline.
+
+Upgrade:
+- Event log system (in-memory or file-based).
+- Repair history tracking.
+- Failure timeline view.
+- Per-node event logs.
+
+
+8) UI VISUALIZATION LIMITATIONS
+--------------------------------
+Current:
+- Basic node grid and health stats.
+
+Upgrade:
+- Live chunk distribution heatmap.
+- Replica placement visualization.
+- Repair event timeline panel.
+- Storage utilization bars.
+- Cluster risk score meter.
+
+
+9) MASTER SINGLE POINT OF FAILURE
+----------------------------------
+Current:
+- FastAPI server acts as master/coordinator.
+
+Risk:
+- If master fails → cluster control lost.
+
+Upgrade:
+- Simulated master fail endpoint.
+- Active-passive master simulation.
+- Leader election mock.
+
+
+10) NO FAILURE DOMAIN AWARENESS
+--------------------------------
+Current:
+- Replica placement random / load-aware.
+
+Upgrade:
+- Simulate failure domains.
+- Avoid placing replicas in same domain.
+- Correlated failure simulation.
+
+
+===========================================
+EXTRA USP / WOW FACTORS (OPTIONAL)
+===========================================
+
+1) SOLAR STORM SIMULATION
+--------------------------
+Endpoint:
+POST /solar-storm
+
+Behavior:
+- Randomly fail multiple nodes.
+- Trigger aggressive replication.
+- Show cluster degradation + recovery.
+
+Impact:
+- High demo value.
+- Space-theme alignment.
+
+
+2) ORBITAL EMERGENCY MODE
+--------------------------
+Concept:
+- When >50% nodes offline → switch to aggressive durability mode.
+- Increase temporary replication.
+- Auto-cleanup on stabilization.
+
+USP:
+- Adaptive replication strategy.
+
+
+3) CLUSTER RISK SCORE ENGINE
+-----------------------------
+Compute risk score based on:
+- % nodes offline
+- under_replicated_chunks
+- corrupted_chunks
+- storage pressure
+
+Display:
+Stable Orbit / Radiation Risk / Collapse Risk.
+
+
+4) REPAIR PERFORMANCE METRICS
+------------------------------
+Track:
+- Time to repair after failure.
+- Time to return to HEALTHY state.
+- Repair count statistics.
+
+USP:
+- Measurable resilience.
+
+
+5) CONTROL PLANE VS DATA PLANE SEPARATION
+------------------------------------------
+Simulate:
+- Master failure.
+- Nodes still hold data.
+- Download disabled when control plane down.
+
+USP:
+- Architectural maturity.
+
+
+6) CORRUPTION INJECTION ENDPOINT
+---------------------------------
+POST /simulate/corruption
+
+Behavior:
+- Randomly corrupt a chunk.
+- Auto-repair fixes it.
+- Demonstrates integrity self-healing.
+
+
+7) STORAGE PRESSURE AWARENESS
+------------------------------
+Track:
+- Node utilization percentage.
+- Cluster storage saturation.
+- Predict failure risk due to full nodes.
+
+USP:
+- Operational intelligence.
+
+
+8) REPLICA PLACEMENT STRATEGY UPGRADE
+--------------------------------------
+Enhance:
+- Avoid adjacent node placement.
+- Weighted distribution.
+- Anti-correlated replica placement.
+
+USP:
+- Failure domain awareness.
+
+
+9) PARTIAL NETWORK PARTITION SIMULATION
+----------------------------------------
+Simulate:
+- Node reachable but slow.
+- Node reachable but partial read fails.
+- Timeout behavior.
+
+USP:
+- Realistic distributed failure modeling.
+
+
+10) FILE AVAILABILITY ESTIMATION
+---------------------------------
+Compute:
+Availability probability based on RF and node health.
+
+Display:
+File-level durability estimate.
+
+
+11) DISTRIBUTED EVENT TIMELINE PANEL
+-------------------------------------
+Visual:
+- Node fail event
+- Repair triggered
+- Replica created
+- Cleanup executed
+- Recovery completed
+
+USP:
+- Enterprise observability.
+
+
+12) BACKGROUND REBALANCER (ADVANCED)
+-------------------------------------
+When node returns:
+- Redistribute chunks evenly.
+- Optimize load balance.
+- Maintain RF.
+
+USP:
+- Self-balancing storage cluster.
+
+
+===========================================
+END OF FINAL PENDING + USP LIST
+===========================================
