@@ -1,35 +1,148 @@
-What You Did Right :
-------------------------------------------------------------------------------------------------------------------------------------------------------------
-Fixed chunk size (512KB) 
-Per-chunk SHA-256 hash 
-Full file SHA-256 hash 
-Unique file_id using UUID 
-Returning structured manifest 
-Clean manifest structure 
-Round-robin primary
-Deterministic replica (next node)
-Real replication (writes to 2 nodes)
-Online node filtering
-Minimum 2 nodes check
-One Important Design Concern
+==============================
+REMAINING LIMITATIONS / IMPROVEMENT AREAS
+==============================
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------
-"data": data  # raw bytes (You are temporarily holding full file in memory) so If file is large → memory spike and manifest becomes heavy object .
-Replica is always (primary + 1) % total_nodes But if Node1 dies:
-Node0 loses replica for chunk0
-Node1 loses primary for chunk1
+1) MEMORY USAGE DURING UPLOAD
+--------------------------------
+Current Behavior:
+- Entire uploaded file is loaded into memory using:
+  content = await file.read()
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------
-Current System Capability Summary
-You have:
-Chunking
-Per-chunk hashing
-Full file hashing
-Replication (factor = 2)
-Node ONLINE/OFFLINE simulation
-Replica fallback
-Metadata persistence
-Clean separation of layers
-Reconstruction validation
+Issue:
+- Large files may cause memory spikes.
+- Not scalable for very large files (100MB+).
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------
+Improvement:
+- Stream file in chunks instead of reading fully into memory.
+- Write file incrementally during upload.
+
+
+2) RAW CHUNK BYTES STORED TEMPORARILY IN MANIFEST
+---------------------------------------------------
+Current Behavior:
+- split_file() stores:
+  "data": data
+  inside manifest until distribution finishes.
+
+Issue:
+- Manifest becomes heavy object in memory.
+- For large files, memory usage increases.
+
+Improvement:
+- Write chunk directly to nodes during split phase.
+- Avoid storing raw bytes inside manifest.
+
+
+3) FIXED REPLICATION FACTOR (HARDCODED = 2)
+----------------------------------------------
+Current Behavior:
+- Replication factor is implicitly 2 (primary + replica).
+
+Issue:
+- Not configurable.
+- System cannot simulate different replication strategies.
+
+Improvement:
+- Add "replication_factor" in metadata.json.
+- Allow dynamic replication configuration.
+
+
+4) DETERMINISTIC REPLICA PLACEMENT
+-------------------------------------
+Current Behavior:
+- Replica = (primary + 1) % total_nodes
+
+Issue:
+- Predictable distribution pattern.
+- Not optimal for load balancing.
+- Not randomized.
+
+Improvement:
+- Randomized replica selection.
+- Avoid placing primary and replica on adjacent node patterns.
+
+
+5) NO BACKGROUND AUTO-REPAIR DAEMON
+---------------------------------------
+Current Behavior:
+- Repair runs:
+  - Manually via /repair
+  - Automatically on node recovery
+
+Issue:
+- No continuous monitoring thread.
+- System does not auto-heal immediately on degradation.
+
+Improvement:
+- Add background scheduler that runs scan + repair periodically.
+- Simulate real distributed repair daemon behavior.
+
+
+6) SINGLE METADATA FILE (NO SHARDING)
+----------------------------------------
+Current Behavior:
+- All metadata stored in one metadata.json file.
+
+Issue:
+- Not scalable for large number of files.
+- Single point of metadata failure.
+
+Improvement:
+- Move to SQLite or structured DB.
+- Or split metadata per file.
+
+
+7) NO LOAD / STORAGE BALANCING LOGIC
+----------------------------------------
+Current Behavior:
+- Distribution only based on round-robin.
+
+Issue:
+- Node storage capacity not considered.
+- Chunk distribution not optimized for equal load.
+
+Improvement:
+- Track node storage usage.
+- Prefer least-loaded node during distribution.
+
+
+8) NO NETWORK SIMULATION
+----------------------------
+Current Behavior:
+- Nodes simulated as local folders.
+- No simulated network latency or partition.
+
+Issue:
+- Not true distributed environment.
+
+Improvement:
+- Simulate artificial latency.
+- Simulate partial network partition scenarios.
+
+
+9) NO VERSIONING OR SNAPSHOT SUPPORT
+----------------------------------------
+Current Behavior:
+- Files overwritten logically via manifest updates.
+- No version history.
+
+Improvement:
+- Maintain version history per file.
+- Add snapshot capability.
+
+
+10) UI-LEVEL LIMITATION (VISUALIZATION)
+-------------------------------------------
+Current Behavior:
+- Backend strong.
+- UI does not fully visualize:
+  - Chunk placement
+  - Replica distribution
+  - Real-time health transitions
+  - Repair events visually
+
+Improvement:
+- Live node heatmap
+- Chunk distribution charts
+- Repair event logs panel
+- System status indicator (HEALTHY / DEGRADED / CRITICAL)

@@ -12,8 +12,8 @@
         "index": 0,
         "size": 51016,
         "hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
-        "primary_node": "node_0",
-        "replica_node": "node_2"
+        "primary_node": "node_1",
+        "replica_node": "node_3"
       }
     ]
   },
@@ -30,8 +30,8 @@
         "index": 0,
         "size": 3052,
         "hash": "ad74b3f7e710fb180f5cfd3204c052b287e45a19f798831128907ffa51dcc639",
-        "primary_node": "node_0",
-        "replica_node": "node_2"
+        "primary_node": "node_1",
+        "replica_node": "node_3"
       }
     ]
   }

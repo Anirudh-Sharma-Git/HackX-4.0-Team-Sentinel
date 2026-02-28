@@ -1,0 +1,204 @@
+You are building a production-style dashboard UI for a Distributed File System Simulation called:
+
+COSMEON FS-Lite
+
+This is NOT a generic CRUD app.
+This is a distributed storage monitoring and control dashboard.
+
+Tech Stack:
+- React (Vite)
+- Tailwind CSS
+- Axios for API calls
+- Recharts (for charts)
+- Lucide React (icons)
+
+IMPORTANT:
+The UI must look clean, minimal, and human-designed.
+It should NOT look like a generic AI-generated admin template.
+Avoid overusing gradients.
+Avoid flashy animations.
+Use subtle shadows, spacing, and typography.
+Prefer dark theme (modern system dashboard style).
+
+------------------------------------------------
+BACKEND API CONTRACT
+------------------------------------------------
+
+Base URL: http://localhost:8000
+
+Available endpoints:
+
+GET    /
+GET    /nodes
+POST   /nodes/{node_id}/fail
+POST   /nodes/{node_id}/recover
+GET    /files
+GET    /files/{file_id}
+POST   /upload
+GET    /download/{file_id}
+GET    /verify/{file_id}
+GET    /health
+POST   /repair
+
+------------------------------------------------
+WHAT THE DASHBOARD MUST INCLUDE
+------------------------------------------------
+
+1) Top Cluster Status Bar
+--------------------------------
+Display:
+- system_status (HEALTHY / DEGRADED / CRITICAL)
+- total_chunks
+- healthy_chunks
+- under_replicated_chunks
+- corrupted_chunks
+
+Use colored badge:
+- Green = HEALTHY
+- Yellow = DEGRADED
+- Red = CRITICAL
+
+Pull data from:
+GET /health
+
+------------------------------------------------
+
+2) Node Grid Section
+--------------------------------
+Display all nodes from:
+GET /nodes
+
+Each Node Card must show:
+- node_id
+- status (ONLINE / OFFLINE)
+- chunk_count
+
+Include:
+- Fail button (if ONLINE)
+- Recover button (if OFFLINE)
+
+Buttons call:
+POST /nodes/{node_id}/fail
+POST /nodes/{node_id}/recover
+
+Node cards should look like satellite system modules.
+Subtle border glow based on status color.
+
+------------------------------------------------
+
+3) File Management Panel
+--------------------------------
+Display list of files from:
+GET /files
+
+Each file row shows:
+- file_name
+- file_size
+- total_chunks
+- file_id
+
+Include buttons:
+- Download (calls GET /download/{file_id})
+- Verify (calls GET /verify/{file_id})
+
+Verification result should display:
+- overall PASS / FAIL
+- show per-chunk status in expandable detail panel
+
+------------------------------------------------
+
+4) Upload Panel
+--------------------------------
+Drag & Drop file upload area.
+
+POST to:
+POST /upload
+
+After upload:
+- Refresh file list
+- Refresh health status
+- Show upload summary:
+  - file_id
+  - total_chunks
+  - full_hash
+
+------------------------------------------------
+
+5) Repair Control Panel
+--------------------------------
+If system_status != HEALTHY:
+Show a “Repair Cluster” button.
+
+Calls:
+POST /repair
+
+After repair:
+- Refresh health
+- Refresh nodes
+
+------------------------------------------------
+
+6) Future-Proof Design Requirements
+--------------------------------
+
+Structure components modularly:
+
+src/
+  api/client.js
+  components/
+    layout/
+    cluster/
+    nodes/
+    files/
+    health/
+  pages/
+    Dashboard.jsx
+
+The UI should be structured so future features like:
+- replication_factor display
+- caching metrics
+- leader election status
+- background repair indicator
+
+can be added WITHOUT redesigning layout.
+
+------------------------------------------------
+
+Design Language Guidelines:
+--------------------------------
+- Use Inter or system font
+- Dark background (#0f172a or similar)
+- Cards with rounded-xl
+- Consistent spacing (p-6, gap-6)
+- No clutter
+- Clean typography hierarchy
+- Subtle hover effects
+- No cartoonish colors
+
+------------------------------------------------
+
+Technical Requirements:
+--------------------------------
+- Use Axios instance with baseURL
+- Use React hooks
+- Use polling (every 5 seconds) for:
+  - /health
+  - /nodes
+
+- Do NOT overcomplicate state management
+- No Redux
+- No unnecessary libraries
+
+------------------------------------------------
+
+Deliver:
+--------------------------------
+- Complete React project structure
+- All necessary components
+- Tailwind setup
+- Clean readable code
+- No placeholder lorem ipsum
+- No fake mock data
+- Real API integration only
+
+The result should look like a professional distributed systems monitoring dashboard.
