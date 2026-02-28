@@ -15,7 +15,16 @@ def scan_system_health() -> dict:
     """
 
     files = list_files()
-
+    if not files:
+        return {
+            "system_status": "HEALTHY",
+            "total_chunks": 0,
+            "healthy_chunks": 0,
+            "under_replicated_chunks": 0,
+            "missing_chunks": 0,
+            "corrupted_chunks": 0,
+            "details": []
+        }
     total_chunks = 0
     healthy_chunks = 0
     under_replicated = 0
@@ -134,27 +143,28 @@ def repair_under_replicated_chunks():
             except Exception:
                 pass
 
-            # If exactly one healthy copy → repair
+            # If exactly one healthy copy → repair missing or corrupted replica
             if len(healthy_locations) == 1:
                 source_node = healthy_locations[0]
 
-                # Find another ONLINE node that does not already have this chunk
+                # Find ONLINE nodes
                 online_nodes = [n["node_id"] for n in get_all_nodes() if n["status"] == "ONLINE"]
 
                 for node_id in online_nodes:
                     if node_id not in healthy_locations:
                         try:
+                            # Copy from healthy source
                             data = read_chunk_from_node(source_node, chunk_id)
                             write_chunk_to_node(node_id, chunk_id, data)
 
-                            # Update replica assignment
+                            # Update metadata
                             if chunk["primary_node"] == source_node:
                                 chunk["replica_node"] = node_id
                             else:
                                 chunk["primary_node"] = node_id
 
                             repaired += 1
-                            print(f"🔧 Repaired chunk {chunk_id} → new copy on {node_id}")
+                            print(f"🔧 Repaired/Restored chunk {chunk_id} on {node_id}")
                             break
                         except Exception:
                             continue
