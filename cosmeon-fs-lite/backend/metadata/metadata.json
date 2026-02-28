@@ -34,5 +34,23 @@
         "replica_node": "node_3"
       }
     ]
+  },
+  "792d54f1": {
+    "file_id": "792d54f1",
+    "file_name": "TT.png",
+    "file_size": 51016,
+    "total_chunks": 1,
+    "chunk_size": 524288,
+    "full_hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
+    "chunks": [
+      {
+        "id": "792d54f1_0",
+        "index": 0,
+        "size": 51016,
+        "hash": "a0314a37e2c88546948a0a1a7de478dafdf34b49100c5dfac532a49d710d0ce2",
+        "primary_node": "node_0",
+        "replica_node": "node_1"
+      }
+    ]
   }
 }
