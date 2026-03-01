@@ -1,0 +1,20 @@
+{
+  "bae250df": {
+    "file_id": "bae250df",
+    "file_name": "Universal_Study_Flow_Theory_and_Numerical.pdf",
+    "file_size": 3052,
+    "total_chunks": 1,
+    "chunk_size": 524288,
+    "full_hash": "ad74b3f7e710fb180f5cfd3204c052b287e45a19f798831128907ffa51dcc639",
+    "chunks": [
+      {
+        "id": "bae250df_0",
+        "index": 0,
+        "size": 3052,
+        "hash": "ad74b3f7e710fb180f5cfd3204c052b287e45a19f798831128907ffa51dcc639",
+        "primary_node": "node_0",
+        "replica_node": "node_1"
+      }
+    ]
+  }
+}
