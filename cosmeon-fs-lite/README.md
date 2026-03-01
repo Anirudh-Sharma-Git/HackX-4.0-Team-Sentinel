@@ -1,134 +1,169 @@
-# 🛰️ COSMEON FS-Lite
-### Orbital File System Simulation — HackX 4.0 | PS-05
-
-A lightweight distributed file system simulation that demonstrates how data
-is stored across multiple orbital satellite nodes — with chunking, replication,
-integrity verification, and fault tolerance.
+# 🛰 COSMEON FS-Lite  
+### Orbital Distributed File System Simulation
 
 ---
 
-## 🚀 What It Does
+## 🚀 Overview
 
-- **Splits** any file into configurable chunks (default 512KB)
-- **Distributes** chunks across 4 simulated satellite nodes using round-robin
-- **Replicates** every chunk on 2 nodes for fault tolerance
-- **Reconstructs** the original file with full SHA-256 integrity verification
-- **Survives node failure** — automatically fetches from replica nodes
-- **Visualizes** everything in a live React dashboard + Admin Panel
+COSMEON FS-Lite is a lightweight distributed file system simulation that demonstrates how data can be stored across multiple orbital satellite nodes.
 
----
+The system:
 
-## 🏗️ Architecture
-```
-File Upload → ChunkEngine → Distributor → NodeManager → MetadataStore
-                                                              ↓
-File Download → ReconstructEngine ← MetadataStore ← IntegrityCheck
-```
+- Splits uploaded files into chunks
+- Distributes chunks across simulated satellite nodes
+- Maintains metadata describing chunk locations
+- Reconstructs files on demand
+- Detects node failures and corruption
+- Automatically repairs under-replicated data
+- Simulates realistic orbital storage constraints
 
-### Components
-
-| Component | Responsibility |
-|-----------|---------------|
-| `chunk_engine.py` | Splits files into chunks, computes SHA-256 hashes |
-| `node_manager.py` | Manages 4 satellite nodes, tracks online/offline status |
-| `distributor.py` | Round-robin chunk assignment with replication factor 2 |
-| `metadata_store.py` | Persists chunk manifests as JSON |
-| `reconstruct.py` | Fetches chunks, verifies hashes, rebuilds file |
-| `main.py` | FastAPI REST API server |
-| `frontend/` | React + Vite dashboard with Admin Panel |
+This project demonstrates core distributed storage principles such as replication, atomic writes, self-healing, and integrity validation.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛰 Architecture
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Python 3.13 + FastAPI |
-| Storage | Local filesystem (simulated nodes) |
-| Metadata | JSON flat file |
-| Hashing | SHA-256 (hashlib) |
-| Frontend | React + Vite + Tailwind-inspired CSS |
-| Charts | Recharts |
-| API Docs | FastAPI auto-generated Swagger UI |
+### 🔷 Control Plane
+- FastAPI backend
+- Metadata management
+- Health monitoring
+- Background repair daemon
+- Node coordination
+
+### 🔷 Data Plane
+- Simulated satellite nodes (folder-based)
+- Chunk storage
+- Capacity limits
+- Replica placement logic
 
 ---
 
-## ⚡ Quick Start
+## 📦 Features
 
-### 1. Clone & setup backend
+### ✅ Core Distributed Storage
+- File chunking
+- Chunk-level SHA-256 hashing
+- Full file hash verification
+- Metadata tracking (chunk → node mapping)
+
+### ✅ Replication (RF = 2)
+- Primary + replica per chunk
+- Load-aware primary selection
+- Randomized replica placement
+- Capacity validation before write
+
+### ✅ Atomic Upload (Rollback Safe)
+If replication fails:
+- All written chunks are removed
+- No partial state remains
+- Metadata is not committed
+
+This guarantees file-level atomicity.
+
+### ✅ Background Auto-Repair
+- Periodic health scanning
+- Detects under-replication
+- Recreates missing replicas automatically
+- Self-healing cluster behavior
+
+### ✅ Over-Replication Cleanup
+When nodes recover:
+- Extra duplicated replicas are removed
+- System stabilizes to target replication factor
+
+### ✅ Node Failure Simulation
+- Manual fail/recover endpoints
+- Health state transitions:
+  - `HEALTHY`
+  - `DEGRADED`
+  - `CRITICAL`
+
+### ✅ Storage Capacity Constraints
+- Per-node storage limit
+- Upload rejected if insufficient space
+- Atomic rollback on capacity failure
+
+Simulates real orbital storage limits.
+
+### ✅ Integrity Validation
+- Chunk-level hash verification
+- Full file integrity verification
+- Corruption detection
+- CRITICAL system state on data loss
+
+### ✅ LRU Download Cache
+- In-memory LRU cache
+- Cache HIT / MISS tracking
+- Eviction policy
+- Faster repeated downloads
+
+### ✅ Activity Log (UI Observability)
+- Live cluster event logs
+- Repair events
+- Failure events
+- Cache activity
+- Distribution activity
+
+---
+
+## 📊 System Health States
+
+The cluster state is classified as:
+
+- **HEALTHY** → All chunks satisfy replication factor
+- **DEGRADED** → Under-replicated chunks detected
+- **CRITICAL** → Missing or corrupted chunks detected
+
+---
+
+## 🔧 How It Works
+
+### 📤 Upload Flow
+1. File temporarily stored
+2. File split into fixed-size chunks
+3. Each chunk assigned:
+   - Primary node
+   - Replica node
+4. Capacity validation performed
+5. If failure occurs → full rollback
+6. Metadata committed
+
+### 📥 Download Flow
+1. Chunks fetched from primary
+2. Replica fallback if primary unavailable
+3. Chunk hash verified
+4. File reconstructed
+5. Full file hash validated
+6. File cached using LRU
+
+### ⚠ Failure Handling
+- Node failure → system becomes DEGRADED
+- Background daemon detects under-replication
+- Missing replicas recreated
+- System returns to HEALTHY
+
+---
+
+## 🧠 Design Philosophy
+
+The system prioritizes:
+
+- Data integrity over blind availability
+- Atomic operations over partial success
+- Autonomous repair over manual intervention
+- Realistic constraint simulation over simple folder storage
+
+The architecture leans toward **CP (Consistency + Partition Tolerance)** in CAP theorem terms.
+
+---
+
+## 🛠 Setup Instructions
+
+### 🔹 Backend
+
 ```bash
 cd backend
-python -m venv venv
-venv\Scripts\activate        # Windows
-pip install fastapi uvicorn python-multipart aiofiles
+pip install -r requirements.txt
 uvicorn main:app --reload
-```
 
-### 2. Setup frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
 
-### 3. Open the app
-| Interface | URL |
-|-----------|-----|
-| Dashboard | http://localhost:5173 |
-| Admin Panel | http://localhost:5173/admin |
-| API Docs | http://localhost:8000/docs |
-
----
-
-## 🎮 How to Demo
-
-### Upload a file
-1. Go to Dashboard → drag & drop any file
-2. Watch it split into chunks and distribute across nodes
-3. See chunk counts update live on node cards
-
-### Verify integrity
-1. Select your file in Download panel
-2. Click **🔐 Verify Integrity**
-3. Every chunk shows SHA-256 PASS ✅
-
-### Simulate node failure
-1. Click **💥 Fail** on any node (Admin Panel or Dashboard)
-2. Node turns red immediately
-3. Click **🔐 Verify Integrity** again — still PASS ✅
-4. System automatically served chunks from replica nodes
-
-### Download & verify
-1. Click **⬇️ Download**
-2. File reconstructed from chunks — identical to original
-
----
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/nodes` | Get all node statuses |
-| POST | `/nodes/{id}/fail` | Simulate node failure |
-| POST | `/nodes/{id}/recover` | Recover a node |
-| GET | `/files` | List all uploaded files |
-| POST | `/upload` | Upload and distribute a file |
-| GET | `/download/{id}` | Reconstruct and download a file |
-| GET | `/verify/{id}` | Run integrity check on all chunks |
-
----
-
-## 🔐 Integrity & Fault Tolerance
-
-- Every chunk has a **SHA-256 hash** computed at upload time
-- On download, each chunk is **re-hashed and compared**
-- The full reconstructed file is **hash-verified** against the original
-- With **replication factor 2**, the system survives any **single node failure**
-- Replica fallback is **automatic** — zero manual intervention needed
-
----
-
-## 👥 Team
-HackX 4.0 — PS-05 Distributed Systems Track
-
-> *"Data should survive the void of space."* — COSMEON FS-Lite
