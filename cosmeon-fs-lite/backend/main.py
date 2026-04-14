@@ -69,7 +69,7 @@ async def background_repair_daemon():
         except Exception as e:
             print(f"⚠️ Background repair error: {e}")
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(2)
 
 
 @app.on_event("startup")
